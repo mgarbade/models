@@ -32,9 +32,9 @@ def require_cloud_storage(flag_names):
   """
   for flag_name in flag_names:
     msg = "--{} must be a GCS path to run on TPU.".format(flag_name)
-    @flags.validator(flag_name=flag_name, message=msg)
-    def _path_check(flag_value):
-      return flag_value.startswith("gs://")
+    @flags.multi_flags_validator(flags["tpu", flag_name], message=msg)
+    def _path_check(values):
+      return values["tpu"] is None or values[flag_name].startswith("gs://")
 
 
 def define_device(tpu=True):

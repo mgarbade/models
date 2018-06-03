@@ -29,6 +29,17 @@ from official.transformer.utils import dataset
 _TRAIN, _EVAL = tf.estimator.ModeKeys.TRAIN, tf.estimator.ModeKeys.EVAL
 
 
+NUM_EXAMPLES = {
+  tf.estimator.ModeKeys.TRAIN: 4572160,
+  # # Examples that are too long are filtered out, thus the total is less
+  # # than the total number of lines.
+  # 2399123 +  # news-commentary-v12.de-en
+  # 1920209 +  # commoncrawl.de-en
+  # 270769,    # europarl-v7.de-en
+  tf.estimator.ModeKeys.EVAL: 3000,  # newstest2013
+}
+
+
 class Manager(object):
   """Container for convenience functions to abstract step or epoch basis.
   Transformer allows users to specify an epoch basis (generally recommended for
@@ -96,9 +107,9 @@ class Manager(object):
   @property
   def repeat_dataset(self):
     if (self._single_iteration_train_epochs is None and
-        self._single_iteration_train_steps > dataset.NUM_EXAMPLES[_TRAIN]):
+        self._single_iteration_train_steps > NUM_EXAMPLES[_TRAIN]):
       return math.ceil(self._single_iteration_train_steps /
-                       dataset.NUM_EXAMPLES[_TRAIN])
+                       NUM_EXAMPLES[_TRAIN])
     return self._single_iteration_train_epochs
 
   def epochs_to_steps(self, num_epochs, mode):
@@ -119,7 +130,7 @@ class Manager(object):
       An integer of the number of equivalent steps rounded down.
     """
     assert self.use_tpu, "epochs_to_steps should only be reached when using TPU"
-    total_num_tokens = dataset.NUM_EXAMPLES[mode] * self.max_length * num_epochs
+    total_num_tokens = NUM_EXAMPLES[mode] * self.max_length * num_epochs
     return total_num_tokens // self.batch_size
 
   def _sleep_if_tpu(self):

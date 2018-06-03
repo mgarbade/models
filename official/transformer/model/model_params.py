@@ -56,7 +56,7 @@ BASE_PARAMS = dict(
     allow_ffn_pad=True,
 )
 
-BIG_PARAMS = {k: v for k, v in BASE_PARAMS.items()}
+BIG_PARAMS = dict(BASE_PARAMS)
 BIG_PARAMS.update(dict(
     default_batch_size=4096,
 
@@ -68,7 +68,7 @@ BIG_PARAMS.update(dict(
     num_heads=16,
 ))
 
-TINY_PARAMS = {k: v for k, v in BASE_PARAMS.items()}
+TINY_PARAMS = dict(BASE_PARAMS)
 TINY_PARAMS.update(dict(
     default_batch_size=1024,
     default_batch_size_tpu=1024,

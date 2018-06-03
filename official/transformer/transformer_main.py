@@ -188,9 +188,8 @@ def get_train_op_and_metrics(loss, params):
     metrics = {"learning_rate": learning_rate}
 
     if not params["use_tpu"]:
-      # TODO(robieta): Find out why.
-      # The gradient norm summary is empirically observed to be unstable with
-      # TPUs.
+      # gradient norm is not included as a summary when running on TPU, as
+      # it can cause instability between the TPU and the host controller.
       gradient_norm = tf.global_norm(list(zip(*gradients))[0])
       metrics["global_norm/gradient_norm"] = gradient_norm
 

@@ -104,9 +104,6 @@ def get_profiler_hook(save_steps=1000, **kwargs):  # pylint: disable=unused-argu
   Returns:
     Returns a ProfilerHook that writes out timelines that can be loaded into
     profiling tools like chrome://tracing.
-
-  Raises:
-    NotImplemetedError if use_tpu is True
   """
   return tf.train.ProfilerHook(save_steps=save_steps)
 

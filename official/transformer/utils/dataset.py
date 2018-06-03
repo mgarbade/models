@@ -67,16 +67,6 @@ _MIN_BOUNDARY = 8
 _BOUNDARY_SCALE = 1.1
 
 
-NUM_EXAMPLES = {
-    tf.estimator.ModeKeys.TRAIN: 4572160,
-    # TODO(robieta): Find out why the actual number is slightly lower.
-    # 2399123 +  # news-commentary-v12.de-en
-    # 1920209 +  # commoncrawl.de-en
-    # 270769,    # europarl-v7.de-en
-    tf.estimator.ModeKeys.EVAL: 3000,  # newstest2013
-}
-
-
 def _load_records(filename):
   """Read file and return a dataset of tf.Examples."""
   return tf.data.TFRecordDataset(filename, buffer_size=_READ_RECORD_BUFFER)

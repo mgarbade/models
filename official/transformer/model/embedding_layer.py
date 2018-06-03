@@ -43,7 +43,8 @@ class EmbeddingSharedWeights(tf.layers.Layer):
     super(EmbeddingSharedWeights, self).__init__()
     self.vocab_size = vocab_size
     self.hidden_size = hidden_size
-    assert method in ("gather", "matmul")
+    if method not in ("gather", "matmul"):
+      raise ValueError("method {} must be 'gather' or 'matmul'".format(method))
     self.method = method
 
   def build(self, _):

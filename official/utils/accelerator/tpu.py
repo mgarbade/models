@@ -31,7 +31,6 @@ from tensorflow.python.ops import math_ops
 LOCAL = "local"
 
 
-# TODO(robieta): See if some version of this can be rolled into TPUEstimator.
 def construct_scalar_host_call(metric_dict, model_dir, prefix=""):
   """Construct a host call to log scalars when training on TPU.
 
