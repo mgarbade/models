@@ -25,16 +25,24 @@ from official.utils.flags._conventions import help_wrap
 
 
 def require_cloud_storage(flag_names):
-  """Register a validator for each directory flag.
+  """Register a validator to check directory flags.
   Args:
     flag_names: An iterable of strings containing the names of flags to be
       checked.
   """
-  for flag_name in flag_names:
-    msg = "--{} must be a GCS path to run on TPU.".format(flag_name)
-    @flags.multi_flags_validator(["tpu", flag_name], message=msg)
-    def _path_check(values):
-      return values["tpu"] is None or values[flag_name].startswith("gs://")
+  msg = "TPU requires GCS path for {}".format(", ".join(flag_names))
+  @flags.multi_flags_validator(["tpu"] + flag_names, message=msg)
+  def _path_check(flag_values):
+    if flag_values["tpu"] is None:
+      return True
+
+    valid_flags = True
+    for key in flag_names:
+      if not flag_values[key].startswith("gs://"):
+        tf.logging.error("{} must be a GCS path.".format(key))
+        valid_flags = False
+
+    return valid_flags
 
 
 def define_device(tpu=True):
